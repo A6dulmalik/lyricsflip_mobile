@@ -11,9 +11,10 @@ import {
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import { Fonts } from '@/constants/Fonts';
+import WagerSummaryModal from '@/components/WagerSummaryModal';
 
 // Define option type
 interface DropdownOption {
@@ -105,6 +106,15 @@ export default function WagerSinglePlayerForm() {
     // Date Picker State
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
+
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const handleStartGame = () => {
+        router.push('../../../screens/wagerSinglePlayer/WagerSinglePlayerMode');
+        setModalVisible(false);
+        // Add your game start logic here
+        console.log('Starting game...');
+    };
 
     const genreOptions: DropdownOption[] = [
         { value: 'sports', label: 'Sports' },
@@ -270,13 +280,16 @@ export default function WagerSinglePlayerForm() {
                 {/* Start Game Button */}
                 <TouchableOpacity
                     style={styles.startButton}
-                    onPress={() => {
-                        // Start game logic here
-                    }}
+                    onPress={() => setModalVisible(true)}
                 >
                     <Text style={styles.startButtonText}>Start Game</Text>
                 </TouchableOpacity>
             </ScrollView>
+            <WagerSummaryModal
+                isVisible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                onStartGame={handleStartGame}
+            />
         </SafeAreaView>
     );
 }
